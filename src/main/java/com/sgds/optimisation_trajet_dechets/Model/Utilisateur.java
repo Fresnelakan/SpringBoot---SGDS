@@ -1,8 +1,17 @@
 package com.sgds.optimisation_trajet_dechets.Model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
+@Table(name = "utilisateurs")
+@Data
 public class Utilisateur {
 
     @Id
@@ -21,55 +30,12 @@ public class Utilisateur {
     private Adresse adresse;
 
     public enum Role {
-        SOUSCRIPTEUR, AGENT
+        SOUSCRIPTEUR, AGENT;
+
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return List.of(new SimpleGrantedAuthority("ROLE_" + this.name()));
+        }
     }
 
-    // Getters et Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getMotDePasse() {
-        return motDePasse;
-    }
-
-    public void setMotDePasse(String motDePasse) {
-        this.motDePasse = motDePasse;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public Adresse getAdresse() {
-        return adresse;
-    }
-
-    public void setAdresse(Adresse adresse) {
-        this.adresse = adresse;
-    }
+    
 }

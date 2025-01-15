@@ -1,9 +1,13 @@
 package com.sgds.optimisation_trajet_dechets.Model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
 @Entity
+@Data
+@Table(name = "paiement")
 public class Paiement {
 
     @Id
@@ -22,44 +26,7 @@ public class Paiement {
 
     private LocalDateTime datePaiement;
 
-    // Getters et Setters
-    public Long getId() {
-        return id;
-    }
+    @Enumerated(EnumType.STRING)
+    private TypeStatut typeStatut;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Utilisateur getUtilisateur() {
-        return utilisateur;
-    }
-
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
-    }
-
-    public Service getService() {
-        return service;
-    }
-
-    public void setService(Service service) {
-        this.service = service;
-    }
-
-    public double getMontant() {
-        return montant;
-    }
-
-    public void setMontant(double montant) {
-        this.montant = montant;
-    }
-
-    public LocalDateTime getDatePaiement() {
-        return datePaiement;
-    }
-
-    public void setDatePaiement(LocalDateTime datePaiement) {
-        this.datePaiement = datePaiement;
-    }
 }
