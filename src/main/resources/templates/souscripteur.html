@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Souscripteur</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body>
+    <h1>Bienvenue, Souscripteur</h1>
+    <div>
+        <h2>Votre Adresse</h2>
+        <form id="adresseForm">
+            <div>
+                <label for="rue">Rue:</label>
+                <input type="text" id="rue" name="rue">
+            </div>
+            <div>
+                <label for="ville">Ville:</label>
+                <input type="text" id="ville" name="ville">
+            </div>
+            <div>
+                <label for="codePostal">Code Postal:</label>
+                <input type="text" id="codePostal" name="codePostal">
+            </div>
+            <div>
+                <label for="pays">Pays:</label>
+                <input type="text" id="pays" name="pays">
+            </div>
+            <div>
+                <button type="submit">Mettre à jour l'adresse</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <h2>Envoyer une Notification</h2>
+        <form id="notificationForm">
+            <div>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message"></textarea>
+            </div>
+            <div>
+                <button type="submit">Envoyer</button>
+            </div>
+        </form>
+    </div>
+    <script src="js/scripts.js"></script>
+</body>
+</html>
