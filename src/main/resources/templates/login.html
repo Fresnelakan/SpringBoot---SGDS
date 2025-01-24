@@ -1,29 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Connexion</title>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
     <h1>Connexion</h1>
-    <form method="post" action="/login">
+    <form method="post" th:action="@{/api/Auth/login}">
         <div>
             <label for="email">Email:</label>
-            <input type="text" id="email" name="username">
+            <input type="text" id="email" name="email">
         </div>
         <div>
             <label for="password">Mot de passe:</label>
-            <input type="password" id="password" name="password">
-        </div>
-        <div>
-            <label for="role">Rôle:</label>
-            <select id="role" name="role">
-                <option value="SOUSCRIPTEUR">Client</option>
-                <option value="AGENT">Agent Collecteur</option>
-            </select>
+            <input type="password" id="password" name="motDePasse"> 
         </div>
         <div>
             <button type="submit">Se connecter</button>
         </div>
     </form>
+    <p>Pas encore inscrit ? <a href="register.html">Inscrivez-vous ici</a></p>
 </body>
 </html>

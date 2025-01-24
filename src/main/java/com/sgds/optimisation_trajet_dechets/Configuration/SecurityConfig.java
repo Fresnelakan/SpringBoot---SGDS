@@ -22,38 +22,38 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-/*     private final UtilisateurRepository utilisateurRepository;
- */    private final CustomUserDetailsService customUserDetailsService;
-    private final JwtUtils jwt;
-
+    private final JwtFilter jwtFilter;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/Auth/**").permitAll() // Permettre l'accès à l'authentification sans authentification
-                .anyRequest().authenticated()
+                .requestMatchers("/login", "/api/Auth/**", "/index", "/register", "/css/**", "/js/**").permitAll()
+                .requestMatchers("/souscripteur").hasRole("SOUSCRIPTEUR")
+                .requestMatchers("/agent").hasRole("AGENT")
+                .anyRequest().permitAll()
+
+
             )
-            .addFilterBefore(new JwtFilter(customUserDetailsService, jwt), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+    @SuppressWarnings("removal")
     @Bean
-    AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception{
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder);
-        return authenticationManagerBuilder.build();
+    AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+            .userDetailsService(customUserDetailsService)
+            .passwordEncoder(passwordEncoder)
+            .and()
+            .build();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-/* 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new CustomUserDetailsService(utilisateurRepository);
-    } */
 }
