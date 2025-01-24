@@ -6,7 +6,7 @@ import com.sgds.optimisation_trajet_dechets.Repository.ServiceRepository;
 import java.util.List;
 import java.util.Optional;
 
-@org.springframework.stereotype.Service  // Utilisation du chemin complet pour éviter le conflit
+@org.springframework.stereotype.Service
 public class DechetService {
 
     private final ServiceRepository serviceRepository;

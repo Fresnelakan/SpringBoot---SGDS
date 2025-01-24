@@ -14,6 +14,7 @@ public class Vehicule {
 
     private int capacite;
 
+    
     public enum Type {
         CLOBOTO, CAMION_A_BENNE
     }
