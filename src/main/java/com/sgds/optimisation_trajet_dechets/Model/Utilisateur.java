@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "utilisateurs")
+@Table(name = "utilisateur")
 @Data
 public class Utilisateur {
 
@@ -25,9 +25,11 @@ public class Utilisateur {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToOne
-    @JoinColumn(name = "adresse_id")
-    private Adresse adresse;
+    @Column(precision = 9)
+    private Double latitude;
+
+    @Column(precision = 9)
+    private Double longitude;
 
     public enum Role {
         SOUSCRIPTEUR, AGENT;

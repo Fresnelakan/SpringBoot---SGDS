@@ -45,4 +45,20 @@ public class UtilisateurService {
     public void supprimerUtilisateur(Long id) {
         utilisateurRepository.deleteById(id);
     }
+
+    public List<Utilisateur> obtenirClientsParRole(String string) {
+        
+        throw new UnsupportedOperationException("Unimplemented method 'obtenirClientsParRole'");
+    }
+
+    public List<Utilisateur> getUsersByRole(String role) {
+        try {
+            // Convertir le String en enum Role
+            Utilisateur.Role enumRole = Utilisateur.Role.valueOf(role.toUpperCase());
+            return utilisateurRepository.findByRole(enumRole); // <-- Appel corrigé
+        } catch (IllegalArgumentException e) {
+            // Gérer le cas où le rôle fourni n'est pas valide
+            throw new IllegalArgumentException("Rôle invalide : " + role, e);
+        }
+    }
 }

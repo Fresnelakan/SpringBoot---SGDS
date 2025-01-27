@@ -11,55 +11,35 @@ public class TrajetService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    // URL de l'API Nominatim pour le géocodage
-    private final String nominatimUrl = "https://nominatim.openstreetmap.org/search?format=json&q=";
-
     // URL de l'API OSRM pour le calcul d'itinéraire
     private final String osrmUrl = "http://router.project-osrm.org/route/v1/driving/";
 
     /**
-     * Méthode pour géocoder une adresse en coordonnées (latitude, longitude).
+     * Méthode pour calculer la distance et l'itinéraire entre deux coordonnées.
      */
-    private String geocoderAdresse(String adresse) {
+    public String calculerTrajetOptimal(double originLat, double originLon, double destLat, double destLon) {
         try {
-            String url = nominatimUrl + adresse.replace(" ", "+");
+            // Formater les coordonnées pour OSRM (format: lon,lat;lon,lat)
+            String coordinates = String.format("%s,%s;%s,%s", 
+                originLon, originLat, 
+                destLon, destLat
+            );
+
+            String url = osrmUrl + coordinates + "?overview=full";
             ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
-            // Parse la réponse JSON pour extraire la latitude et la longitude
+            // Extraire la distance et la durée de la réponse
             JsonNode root = objectMapper.readTree(response.getBody());
-            if (root.isArray() && root.size() > 0) {
-                JsonNode firstResult = root.get(0);
-                double lat = firstResult.get("lat").asDouble();
-                double lon = firstResult.get("lon").asDouble();
-                return lon + "," + lat; // Format attendu par OSRM : "lon,lat"
-            }
+            JsonNode route = root.get("routes").get(0);
+            
+            return String.format(
+                "{\"distance\": %.2f km, \"duree\": %.2f minutes}", 
+                route.get("distance").asDouble() / 1000, 
+                route.get("duration").asDouble() / 60
+            );
+
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * Méthode pour calculer la distance et l'itinéraire entre deux adresses.
-     */
-    public String calculerDistance(String origine, String destination) {
-        try {
-            // Géocodage des adresses
-            String coordOrigine = geocoderAdresse(origine);
-            String coordDestination = geocoderAdresse(destination);
-
-            if (coordOrigine == null || coordDestination == null) {
-                return "{\"error\":\"Impossible de géocoder les adresses.\"}";
-            }
-
-            // Calcul de l'itinéraire avec OSRM
-            String url = osrmUrl + coordOrigine + ";" + coordDestination;
-            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-
-            // Retourne la réponse brute de l'API OSRM
-            return response.getBody();
-        } catch (Exception e) {
-            return String.format("{\"error\":\"Une erreur s'est produite : %s\"}", e.getMessage());
+            return String.format("{\"error\":\"Erreur lors du calcul du trajet: %s\"}", e.getMessage());
         }
     }
 }

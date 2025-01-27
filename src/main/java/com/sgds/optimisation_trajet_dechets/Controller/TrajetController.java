@@ -17,12 +17,15 @@ public class TrajetController {
         this.trajetService = trajetService;
     }
 
-    @GetMapping("/distance")
-    public ResponseEntity<String> obtenirDistance(
-        @RequestParam String origine,
-        @RequestParam String destination
-    ) {
-        String distance = trajetService.calculerDistance(origine, destination);
-        return ResponseEntity.ok(distance);
-    }
+    // Dans TrajetController.java
+@GetMapping("/optimiser")
+public ResponseEntity<String> optimiserTrajet(
+    @RequestParam double originLat, 
+    @RequestParam double originLon,
+    @RequestParam double destLat,
+    @RequestParam double destLon
+) {
+    String result = trajetService.calculerTrajetOptimal(originLat, originLon, destLat, destLon);
+    return ResponseEntity.ok(result);
+}
 }

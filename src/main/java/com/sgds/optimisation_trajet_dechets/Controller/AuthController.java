@@ -56,7 +56,9 @@ public class AuthController {
                 .body("Error: Email is already in use!");
         }
 
-        utilisateur.setAdresse(utilisateur.getAdresse());
+        // Récupérer latitude/longitude depuis la requête
+        utilisateur.setLatitude(utilisateur.getLatitude());
+        utilisateur.setLongitude(utilisateur.getLongitude());
         utilisateur.setMotDePasse(hashedPassWord);
         utilisateur.setRole(utilisateur.getRole());
         utilisateur.setNom(utilisateur.getNom());
