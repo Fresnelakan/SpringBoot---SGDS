@@ -1,7 +1,11 @@
 package com.sgds.optimisation_trajet_dechets.Controller;
 
 import com.sgds.optimisation_trajet_dechets.Model.Utilisateur;
+import com.sgds.optimisation_trajet_dechets.Model.Utilisateur.Role;
+import com.sgds.optimisation_trajet_dechets.Model.Vehicule;
 import com.sgds.optimisation_trajet_dechets.Service.UtilisateurService;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,5 +57,22 @@ public class UtilisateurController {
     @DeleteMapping("/{id}")
     public void supprimerUtilisateur(@PathVariable Long id) {
         utilisateurService.supprimerUtilisateur(id);
+    }
+
+    @PostMapping("/{id}/assigner-vehicule")
+    public ResponseEntity<String> assignerVehicule(
+        @PathVariable Long id, 
+        @RequestBody Vehicule vehicule
+    ) {
+        Optional<Utilisateur> userOpt = utilisateurService.obtenirUtilisateurParId(id);
+        if (userOpt.isEmpty() || !userOpt.get().getRole().equals(Role.AGENT)) {
+            return ResponseEntity.badRequest().body("Agent non trouvé");
+        }
+
+        Utilisateur agent = userOpt.get();
+        agent.setVehicule(vehicule);
+        utilisateurService.mettreAJourUtilisateur(id, agent);
+        
+        return ResponseEntity.ok("Véhicule assigné avec succès");
     }
 }

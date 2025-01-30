@@ -38,6 +38,8 @@ public class Utilisateur {
             return List.of(new SimpleGrantedAuthority("ROLE_" + this.name()));
         }
     }
+    @OneToOne
+    private Vehicule vehicule; // Un Agent a un véhicule assigné
 
     
 }

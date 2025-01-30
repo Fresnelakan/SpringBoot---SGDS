@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UtilisateurService {
@@ -52,13 +53,10 @@ public class UtilisateurService {
     }
 
     public List<Utilisateur> getUsersByRole(String role) {
-        try {
-            // Convertir le String en enum Role
-            Utilisateur.Role enumRole = Utilisateur.Role.valueOf(role.toUpperCase());
-            return utilisateurRepository.findByRole(enumRole); // <-- Appel corrigé
-        } catch (IllegalArgumentException e) {
-            // Gérer le cas où le rôle fourni n'est pas valide
-            throw new IllegalArgumentException("Rôle invalide : " + role, e);
-        }
-    }
+    return utilisateurRepository.findByRole(Utilisateur.Role.valueOf(role))
+        .stream()
+        .filter(u -> u.getLatitude() != null && u.getLongitude() != null)
+        .collect(Collectors.toList()); // Filtre les nulls
+}
+
 }
